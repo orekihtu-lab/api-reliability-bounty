@@ -1,8 +1,12 @@
 #!/bin/sh
 set -eu
 
-root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-subject="$root/solution/retry_decision.sh"
+if [ -f /workspace/retry_decision.sh ]; then
+  subject=/workspace/retry_decision.sh
+else
+  root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+  subject="$root/solution/retry_decision.sh"
+fi
 tmp="${TMPDIR:-/tmp}/api-retry-bounty.$$"
 trap 'rm -rf "$tmp"' EXIT HUP INT TERM
 mkdir -p "$tmp"
@@ -85,4 +89,3 @@ if [ "$failures" -ne 0 ]; then
 fi
 
 printf '%s\n' 'all API retry decision benchmark cases passed'
-
